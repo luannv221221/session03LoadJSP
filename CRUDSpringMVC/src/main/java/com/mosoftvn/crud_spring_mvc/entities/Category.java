@@ -1,9 +1,12 @@
 package com.mosoftvn.crud_spring_mvc.entities;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.GenerationType;
 @Entity
@@ -17,18 +20,12 @@ public class Category {
 	private String categoryName;
 	@Column(name = "categoryStatus")
 	private Boolean categoryStatus;
-	
+	@OneToMany(mappedBy = "category")
+	private Set<Product> products;
 	public Category() {
 		// TODO Auto-generated constructor stub
 	}
-
-	public Category(Integer categoryId, String categoryName, Boolean categoryStatus) {
-		super();
-		this.categoryId = categoryId;
-		this.categoryName = categoryName;
-		this.categoryStatus = categoryStatus;
-	}
-
+	
 	public Integer getCategoryId() {
 		return categoryId;
 	}
@@ -53,5 +50,11 @@ public class Category {
 		this.categoryStatus = categoryStatus;
 	}
 	
+	public Set<Product> getProducts() {
+		return products;
+	}
 	
+	public void setProducts(Set<Product> products) {
+		this.products = products;
+	}
 }

@@ -7,40 +7,34 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.mosoftvn.crud_spring_mvc.entities.Category;
+import com.mosoftvn.crud_spring_mvc.entities.Product;
 
 @Repository
-public class CategoryDAOImpl implements CategoryDAO {
+public class ProductDAOImpl implements ProductDAO {
 	@Autowired
 	private SessionFactory sessionFactory;
 	@Override
-	public List<Category> getAll() {
-		// TODO Auto-generated method stub
+	public List<Product> getAll() {
 		Session session = sessionFactory.openSession();
-		
 		try {
-			List list = session.createQuery("from Category").list();
+			List list = session.createQuery("from Product p ORDER BY p.productId DESC").list();
 			return list;
 		} catch (Exception e) {
-			// TODO: handle exception
+			// TODO: handle exception\
 			e.printStackTrace();
-		} finally {
-			session.close();
 		}
 		return null;
 	}
 
 	@Override
-	public Boolean create(Category category) {
-		// TODO Auto-generated method stub
+	public Boolean create(Product product) {
 		Session session = sessionFactory.openSession();
 		try {
-			
-			session.save(category);
-			
+		
+			session.save(product);
 			return true;
 		} catch (Exception e) {
-			
+			// TODO: handle exception
 		} finally {
 			session.close();
 		}
@@ -48,13 +42,13 @@ public class CategoryDAOImpl implements CategoryDAO {
 	}
 
 	@Override
-	public Category find(Integer categoryID) {
+	public Product find(Integer productID) {
 		Session session = sessionFactory.openSession();
 		try {
-			Category category = session.get(Category.class,categoryID);
-			return category;
+			Product product = session.get(Product.class, productID);
+			return product;
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		} finally {
 			session.close();
 		}
@@ -62,34 +56,34 @@ public class CategoryDAOImpl implements CategoryDAO {
 	}
 
 	@Override
-	public Boolean delete(Integer categoryID) {
-		Session session = sessionFactory.openSession();
-		
-		try {
-			session.beginTransaction();
-			session.delete(find(categoryID));
-			session.getTransaction().commit();
-			return true;
-		} catch (Exception e) {
-			// TODO: handle exception
-			session.getTransaction().rollback();
-		} finally {
-			session.close();
-		}
-		return null;
-	}
-
-	@Override
-	public Boolean update(Category category) {
+	public Boolean update(Product product) {
 		Session session = sessionFactory.openSession();
 		try {
 			session.beginTransaction();
-			session.update(category);
+			session.update(product);
 			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
+			session.getTransaction().rollback();
+		} finally {
+			session.close();
+		}
+		return false;
+	}
+
+	@Override
+	public Boolean delete(Integer productID) {
+		Session session = sessionFactory.openSession();
+		
+		try {
+			session.beginTransaction();
+			session.delete(find(productID));
+			session.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			// TODO: handle exception
 			session.getTransaction().rollback();
 		} finally {
 			session.close();

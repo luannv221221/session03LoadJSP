@@ -24,7 +24,7 @@ public class CategoryControllers {
 	
 	@Autowired
 	private CategoryDAO categoryDAO;
-	@RequestMapping(value = "/")
+	@RequestMapping(value = "/category")
 	public String index(Model model) {
 		List<Category> list = categoryDAO.getAll();
 		model.addAttribute("list",list);
@@ -39,11 +39,12 @@ public class CategoryControllers {
 	}
 	
 	@PostMapping(value = "/insertCategory")
-	public String save(@ModelAttribute("category")Category category,Model model) {
+	public String save(@ModelAttribute("category")Category category,Model model,RedirectAttributes redirectAttrs) {
 		
 		boolean check = categoryDAO.create(category);
 		if(check) {
-			return "redirect:/";
+			redirectAttrs.addFlashAttribute("success", "Xóa thành công");
+			return "redirect:/category";
 		}
 			
 		return "category/add";
@@ -54,7 +55,7 @@ public class CategoryControllers {
 		
 		if(categoryDAO.delete(Integer.parseInt(id))) {
 			redirectAttrs.addFlashAttribute("success", "Xóa thành công");
-			return "redirect:/";
+			return "redirect:/category";
 		}
 		
 		return "redirect:/";
